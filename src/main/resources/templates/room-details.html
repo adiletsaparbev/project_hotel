@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Анимация для изображений */
+        @keyframes fadeInZoom {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        /* Применение анимации */
+        .animate-fade-zoom {
+            animation: fadeInZoom 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container my-4">
+    <h1 class="text-center">Подробнее</h1>
+
+    <!-- Информация о комнате -->
+    <div class="card my-4">
+        <div class="card-header bg-dark text-white">Информация о комнате</div>
+        <div class="card-body">
+            <!-- Отображение изображений -->
+            <div class="row g-3">
+                <div class="col-md-4" th:each="img : ${room.images}">
+                    <div class="card">
+                        <div class="ratio ratio-16x9">
+                            <img th:src="@{/images/{id}(id=${img.id})}"
+                                 class="img-fluid rounded shadow animate-fade-zoom"
+                                 alt="Изображение комнаты">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Изображение комнаты</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <p><strong>ID:</strong> <span th:text="${room.roomId}"></span></p>
+            <p><strong>Номер комнаты:</strong> <span th:text="${room.roomNumber}"></span></p>
+            <p><strong>Тип комнаты:</strong> <span th:text="${room.roomType}"></span></p>
+            <p><strong>Количество кроватей:</strong> <span th:text="${room.bedCount}"></span></p>
+            <p><strong>Цена за ночь:</strong> <span th:text="${room.pricePerNight}"></span></p>
+            <p><strong>Доступность:</strong>
+                <span th:text="${room.availability ? 'Доступно' : 'Не доступно'}"
+                      th:classappend="${room.availability ? 'text-success' : 'text-danger'}"></span>
+            </p>
+            <p><strong>Описание:</strong> <span th:text="${room.description}"></span></p>
+        </div>
+    </div>
+    <!-- Услуги комнаты -->
+    <div class="card mt-5">
+        <div class="card-header bg-success text-white">Удобства</div>
+        <div class="card-body">
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="amenity : ${room.amenities}">
+                    <span th:text="${amenity.name}"></span>
+                    <form th:action="@{/rooms/{roomId}/deleteAmenity/{amenityId}(roomId=${room.roomId}, amenityId=${amenity.id})}"
+                          method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </li>
+            </ul>
+
+            <!-- Добавление удобства -->
+            <form th:action="@{/rooms/{roomId}/addAmenity(roomId=${room.roomId})}" method="post">
+                <div class="input-group">
+                    <input type="text" name="name" class="form-control" placeholder="Введите название удобства" required>
+                    <button class="btn btn-primary" type="submit">Добавить удобство</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Форма для обновления комнаты -->
+    <div class="card mt-5">
+        <div class="card-header bg-primary text-white">Обновить комнату</div>
+        <div class="card-body">
+            <form th:action="@{/rooms/update/{id}(id=${room.roomId})}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="roomNumber" class="form-label">Номер комнаты</label>
+                    <input type="text" class="form-control" id="roomNumber" name="roomNumber" th:value="${room.roomNumber}">
+                </div>
+                <div class="mb-3">
+                    <label for="roomType" class="form-label">Тип комнаты</label>
+                    <input type="text" class="form-control" id="roomType" name="roomType" th:value="${room.roomType}">
+                </div>
+                <div class="mb-3">
+                    <label for="bedCount" class="form-label">Количество кроватей</label>
+                    <input type="number" class="form-control" id="bedCount" name="bedCount" th:value="${room.bedCount}">
+                </div>
+                <div class="mb-3">
+                    <label for="pricePerNight" class="form-label">Цена за ночь</label>
+                    <input type="number" step="0.01" class="form-control" id="pricePerNight" name="pricePerNight" th:value="${room.pricePerNight}">
+                </div>
+                <div class="mb-3">
+                    <label for="availability" class="form-check-label">Доступность</label>
+                    <input type="checkbox" class="form-check-input" id="availability" name="availability" th:checked="${room.availability}">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание</label>
+                    <textarea class="form-control" id="description" name="description" th:text="${room.description}"></textarea>
+                </div>
+                <!-- Загрузка изображений -->
+                <div class="mb-3">
+                    <label for="file1" class="form-label">Загрузить изображение 1</label>
+                    <input type="file" class="form-control" id="file1" name="file1">
+                </div>
+                <div class="mb-3">
+                    <label for="file2" class="form-label">Загрузить изображение 2</label>
+                    <input type="file" class="form-control" id="file2" name="file2">
+                </div>
+                <div class="mb-3">
+                    <label for="file3" class="form-label">Загрузить изображение 3</label>
+                    <input type="file" class="form-control" id="file3" name="file3">
+                </div>
+                <button type="submit" class="btn btn-primary">Обновить комнату</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="/rooms" class="btn btn-secondary mt-3">Назад к комнатам</a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

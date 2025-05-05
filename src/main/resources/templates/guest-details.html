@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container my-4">
+    <h1 class="text-center">Guest Details</h1>
+
+    <!-- Информация о комнате -->
+    <div class="card my-4">
+        <div class="card-header bg-dark text-white">Guest Information</div>
+        <div class="card-body">
+            <p><strong>ID:</strong> <span th:text="${guest.guestId}"></span></p>
+            <p><strong>Имя:</strong> <span th:text="${guest.fName}"></span></p>
+            <p><strong>Фамилия:</strong> <span th:text="${guest.lName}"></span></p>
+            <p><strong>Отечество:</strong> <span th:text="${guest.pName}"></span></p>
+            <p><strong>Дата рождение:</strong> <span th:text="${guest.dataBorn}"></span></p>
+            <p><strong>Телефон номер:</strong> <span th:text="${guest.phone}"></span></p>
+            <p><strong> Электронный адрес:</strong> <span th:text="${guest.email}"></span></p>
+            <p><strong>Адрес:</strong> <span th:text="${guest.address}"></span></p>
+            <p><strong>Номер паспорта:</strong> <span th:text="${guest.passportNumber}"></span></p>
+        </div>
+    </div>
+
+
+    <!-- Обновление комнаты -->
+    <div class="card mt-5">
+        <div class="card-header bg-primary text-white">Update Room</div>
+        <div class="card-body">
+            <form th:action="@{/guests/update/{guestId}(guestId=${guest.guestId})}" method="post">
+                <div class="mb-3">
+                    <label for="fName" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="fName" name="fName" th:value="${guest.fName}">
+                </div>
+                <div class="mb-3">
+                    <label for="lName" class="form-label">Фамилия</label>
+                    <input type="text" class="form-control" id="lName" name="lName" th:value="${guest.lName}">
+                </div>
+                <div class="mb-3">
+                    <label for="pName" class="form-label">Отечество</label>
+                    <input type="text" class="form-control" id="pName" name="pName" th:value="${guest.pName}">
+                </div>
+                <div class="mb-3">
+                    <label for="dataBorn" class="form-label">Дата рождение</label>
+                    <input type="date"  class="form-control" id="dataBorn" name="dataBorn" th:value="${guest.dataBorn}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Телефон</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" th:value="${guest.phone}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" th:value="${guest.email}">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Адрес</label>
+                    <input type="text" class="form-control" id="address" name="address" th:value="${guest.address}">
+                </div>
+                <div class="mb-3">
+                    <label for="passportNumber" class="form-label">Номер паспорта</label>
+                    <input type="text" class="form-control" id="passportNumber" name="passportNumber" th:value="${guest.passportNumber}">
+                </div>
+                <button type="submit" class="btn btn-primary">Update Guest</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="/guests" class="btn btn-secondary mt-3">Back to Guests</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
