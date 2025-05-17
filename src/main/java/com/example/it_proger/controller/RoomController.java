@@ -1,9 +1,6 @@
 package com.example.it_proger.controller;
 
-import com.example.it_proger.models.Amenity;
-import com.example.it_proger.models.Booking;
-import com.example.it_proger.models.Image;
-import com.example.it_proger.models.Room;
+import com.example.it_proger.models.*;
 import com.example.it_proger.repo.*;
 import com.example.it_proger.servise.AppUserService;
 import com.example.it_proger.servise.RoomService;
@@ -14,11 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/rooms")
@@ -29,6 +28,7 @@ public class RoomController {
 
     private final AppUserRepository userRepository;
     private final AppUserService userService;
+    private final HotelRepository hotelRepository;
 
     // метод для добавление картинки
     private Image toImageEntity(MultipartFile file) throws IOException{
@@ -71,15 +71,33 @@ public class RoomController {
         return "rooms"; // Укажите имя шаблона для отображения результатов
     }
 
+    @GetMapping("/add")
+    public String showAddRoomForm(Model model) {
+        List<Hotel> hotels = hotelRepository.findAll(); // Получаем список отелей из базы
+        model.addAttribute("hotels", hotels); // Добавляем его в модель
+        model.addAttribute("room", new Room()); // Чтобы избежать ошибок в форме
+        return "room_form"; // Название HTML-шаблона, например room_form.html
+    }
+
     // добавление комнат
     @PostMapping("/add")
     public String addRoom(@RequestParam("file1") MultipartFile file1,
                           @RequestParam("file2") MultipartFile file2,
                           @RequestParam("file3") MultipartFile file3,
-                          Room room) throws IOException {
-        roomService.saveRoom(room, file1, file2, file3);
+                          @RequestParam int hotel_id,
+                          Room room,
+                          RedirectAttributes redirectAttributes) throws IOException {
+        Optional<Hotel> hotel = hotelRepository.findById(hotel_id);
+        if (hotel.isPresent()) {
+            room.setHotel(hotel.get());
+            roomService.saveRoom(room, file1, file2, file3);
+            redirectAttributes.addFlashAttribute("message", "Комната успешно добавлена.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Отель не найден.");
+        }
         return "redirect:/rooms";
     }
+
 
 
     // удаление комнат

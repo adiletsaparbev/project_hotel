@@ -1,0 +1,25 @@
+<div th:fragment="roomTable" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h3>Rooms</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-primary">
+            <tr>
+                <th>Room Number</th>
+                <th>Type</th>
+                <th>Beds</th>
+                <th>Price</th>
+                <th>Available</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.roomNumber}"></td>
+                <td th:text="${room.roomType}"></td>
+                <td th:text="${room.bedCount}"></td>
+                <td th:text="${room.pricePerNight}"></td>
+                <td th:text="${room.available ? 'Yes' : 'No'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

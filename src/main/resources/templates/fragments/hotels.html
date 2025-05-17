@@ -1,0 +1,34 @@
+<div th:fragment="hotelTable" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h3>Hotels</h3>
+    <table class="table table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Number</th>
+            <th>Address</th>
+            <th>Password</th>
+            <th>Rank</th>
+            <th>Description</th>
+            <th>City ID</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hotel : ${hotels}">
+            <td th:text="${hotel.id}">1</td>
+            <td>
+                <a href="#" th:text="${hotel.number}" th:attr="data-id=${hotel.id}" class="hotel-link text-decoration-none"></a>
+            </td>
+            <td th:text="${hotel.address}">Address</td>
+            <td th:text="${hotel.password}">***</td>
+            <td th:text="${hotel.hotelRank}">5</td>
+            <td th:text="${hotel.description}">Description</td>
+            <td th:text="${hotel.city.id}">2</td>
+            <td>
+                <a th:href="@{'/edit/' + ${hotel.id}}" class="btn btn-sm btn-primary">Edit</a>
+                <a th:href="@{'/hotels/delete/' + ${hotel.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

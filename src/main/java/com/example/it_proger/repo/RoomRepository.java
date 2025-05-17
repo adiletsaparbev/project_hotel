@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Integer> {
+    List<Room> findByHotelId(Integer hotelId);
     boolean existsByRoomNumber(String roomNumber);
 
     @Query("SELECT r FROM Room r WHERE " +

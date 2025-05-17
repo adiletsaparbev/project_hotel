@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать отель</title>
+</head>
+<body>
+<h1>Редактировать отель</h1>
+<form th:action="@{'/update/' + ${hotel.id}}" th:object="${hotel}" method="post">
+
+    <label>Номер:</label>
+    <input type="text" th:field="*{number}" required /><br/>
+
+    <label>Адрес:</label>
+    <input type="text" th:field="*{address}" required /><br/>
+
+    <label>Пароль:</label>
+    <input type="password" th:field="*{password}" required /><br/>
+
+    <label>Рейтинг отеля:</label>
+    <input type="number" th:field="*{hotelRank}" min="1" max="5" required /><br/>
+
+    <label>Описание:</label>
+    <textarea th:field="*{description}"></textarea><br/>
+
+    <label>Город:</label>
+    <select th:field="*{city}" required>
+        <option th:each="c : ${cities}" th:value="${c.id}" th:text="${c.name}"></option>
+    </select>
+    <br/>
+
+    <button type="submit">Сохранить</button>
+</form>
+</body>
+</html>

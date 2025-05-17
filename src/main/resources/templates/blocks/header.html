@@ -20,7 +20,7 @@
                     <a href="/book/bookings" class="btn btn-success">Бронированный</a>
                 </div>
                 <div class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                    <a href="/admin" class="btn btn-success">Создание Аккаунт</a>
+                    <a href="/locations" class="btn btn-success">Для Админа</a>
                 </div>
             </nav>
         </div>

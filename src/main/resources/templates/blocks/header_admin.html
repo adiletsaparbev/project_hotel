@@ -1,0 +1,27 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="header" style="background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 10px 20px;">
+        <div class="header_block" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+            <!-- Logo -->
+            <a href="/" class="icon" style="display: flex; align-items: center; text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" viewBox="0 0 118 94" role="img">
+                    <title>Bootstrap</title>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M..." fill="currentColor"></path>
+                </svg>
+                <span class="fs-4" style="font-size: 24px; margin-left: 1px; font-weight: bold; color: #000;">B.A.M</span>
+            </a>
+
+            <!-- Navigation Menu -->
+            <nav class="table_header" style="display: flex; gap: 20px;">
+                <a class="menu_item" href="/locations" style="text-decoration: none; color: #333; font-size: 16px;">Главная</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/countries/add" style="text-decoration: none; color: #333; font-size: 16px;">Добавление</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/users" style="text-decoration: none; color: #333; font-size: 16px;">Пользователи</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/register_worker" style="text-decoration: none; color: #333; font-size: 16px;">Добавить Работника</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/register_admin" style="text-decoration: none; color: #333; font-size: 16px;">Добавить Админ</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/login" style="text-decoration: none; color: #333; font-size: 16px;">Авторизация</a>
+                <div class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a href="/admin" class="btn btn-success">Создание Аккаунт</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

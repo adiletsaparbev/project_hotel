@@ -1,0 +1,26 @@
+<div th:fragment="cityTable" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h3>Cities</h3>
+    <table class="table table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>City Name</th>
+            <th>Country ID</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="city : ${cities}">
+            <td th:text="${city.id}">1</td>
+            <td>
+                <a href="#" th:text="${city.name}" th:attr="data-id=${city.id}" class="city-link text-decoration-none"></a>
+            </td>
+            <td th:text="${city.country.id}">1</td>
+            <td>
+                <a th:href="@{'/cities/edit/' + ${city.id}}" class="btn btn-sm btn-primary">Edit</a>
+                <a th:href="@{'/cities/delete/' + ${city.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -11,9 +11,10 @@ import java.util.List;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String number;
     private String address;
+    private String password;
     private int hotelRank;
     private String description;
 

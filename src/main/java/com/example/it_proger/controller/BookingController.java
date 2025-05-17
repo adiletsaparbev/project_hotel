@@ -56,7 +56,6 @@ public class BookingController {
         } else {
             results = bookingService.getAllBookings(); // Все бронирования, если не задан фильтр
         }
-
         model.addAttribute("bookings", results);
         return "bookings"; // Возвращает ту же страницу со списком
     }
