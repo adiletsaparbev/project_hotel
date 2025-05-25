@@ -42,6 +42,7 @@ public class MainController {
     public String getFilteredRooms(@RequestParam(required = false) Double minPrice,
                                    @RequestParam(required = false) Double maxPrice,
                                    @RequestParam(required = false) List<String> amenities,
+                                   @RequestParam(required = false) Integer bedCount, // Добавлено
                                    Model model) {
         // Получаем все доступные комнаты
         List<Room> filteredRooms = roomService.getAvailableRooms();
@@ -71,6 +72,13 @@ public class MainController {
                                 .map(String::toLowerCase)
                                 .collect(Collectors.toSet()));
                     })
+                    .collect(Collectors.toList());
+        }
+
+        // Фильтрация по количеству кроватей
+        if (bedCount != null) {
+            filteredRooms = filteredRooms.stream()
+                    .filter(room -> room.getBedCount() == bedCount)
                     .collect(Collectors.toList());
         }
 

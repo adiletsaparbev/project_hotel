@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/contact").permitAll()
                         .requestMatchers("/store/**").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/register_admin").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/book/add-booking").permitAll()

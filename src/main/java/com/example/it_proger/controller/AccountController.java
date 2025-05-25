@@ -81,11 +81,11 @@ public class AccountController {
             newUser.setEmail(registerDto.getEmail());
             newUser.setPhone(registerDto.getPhone());
             newUser.setAddress(registerDto.getAddress());
+            newUser.setBirthday(registerDto.getBirthday());
             newUser.setRole(Role.USER);
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));
             repo.save(newUser);
-
             model.addAttribute("registerDto", new RegisterDto());
             model.addAttribute("success", true);
 
@@ -143,6 +143,7 @@ public class AccountController {
             newUser.setPhone(registerDto.getPhone());
             newUser.setAddress(registerDto.getAddress());
             newUser.setRole(Role.WORKER);
+            newUser.setBirthday(registerDto.getBirthday());
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));
             repo.save(newUser);
@@ -202,6 +203,7 @@ public class AccountController {
             newUser.setEmail(registerDto.getEmail());
             newUser.setPhone(registerDto.getPhone());
             newUser.setAddress(registerDto.getAddress());
+            newUser.setBirthday(registerDto.getBirthday());
             newUser.setRole(Role.ADMIN);
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));

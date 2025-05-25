@@ -17,19 +17,32 @@ public class Booking {
 
 
     private String roomNumber;
-
     private String firstName;
     private String lastName;
+    private String hotel;
+    private String address;
     private LocalDate dateOfBirth;
     private String passportNumber;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
+    private String password;
     private double totalAmount;
     @Enumerated(EnumType.STRING)
-    private BookingStatus status; // Статус бронирования (например, "Ожидает оплаты", "Оплачено", "Отменено")
+    private BookingStatus status;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private AppUser user;
 
     public Booking(String userName, String userEmail, String checkInDate, String checkOutDate, Room room) {
     }
+
 
     public Booking() {
     }

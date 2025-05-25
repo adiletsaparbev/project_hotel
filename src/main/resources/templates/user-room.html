@@ -110,7 +110,9 @@
                      alt="Картинка комнаты">
             </div>
 
+
             <p><strong>Номер комнаты:</strong> <span th:text="${room.roomNumber}"></span></p>
+            <p><strong>Номер комнаты:</strong> <span th:text="${room.roomId}"></span></p>
             <p><strong>Тип комнаты:</strong> <span th:text="${room.roomType}"></span></p>
             <p><strong>Кровать:</strong> <span th:text="${room.bedCount}"></span></p>
             <p><strong>Цена на ночь:</strong> <span th:text="${room.pricePerNight}"></span> USD</p>
@@ -131,7 +133,7 @@
 
         <div class="card-footer bg-light text-end">
             <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-                <a href="/book/add-booking">Бронирование</a>
+                <a th:href="@{/book/add-booking/{id}(id=${room.roomId})}">Бронирование</a>
             </li>
         </div>
     </div>

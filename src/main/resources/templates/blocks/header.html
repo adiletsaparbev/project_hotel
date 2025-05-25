@@ -14,6 +14,8 @@
             <nav class="table_header" style="display: flex; gap: 20px;">
                 <a class="menu_item" href="/" style="text-decoration: none; color: #333; font-size: 16px;">Главная</a>
                 <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}" href="/rooms" style="text-decoration: none; color: #333; font-size: 16px;">Комнаты</a>
+               <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}" href="/rooms/add" style="text-decoration: none; color: #333; font-size: 16px;">Добавить</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" href="/profile" style="text-decoration: none; color: #333; font-size: 16px;">Профиль</a>
                 <a class="menu_item" href="/register" style="text-decoration: none; color: #333; font-size: 16px;">Регистрация</a>
                 <a class="menu_item" href="/login" style="text-decoration: none; color: #333; font-size: 16px;">Авторизация</a>
                 <div class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}">

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div class="container mt-5">
+
+    <div class="card shadow rounded-4 mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Профиль пользователя</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Имя</dt>
+                <dd class="col-sm-9" th:text="${user.firstName}">Имя</dd>
+                <dt class="col-sm-3">Фамилия</dt>
+                <dd class="col-sm-9" th:text="${user.lastName}">Фамилия</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9" th:text="${user.email}">email@example.com</dd>
+                <dt class="col-sm-3">Телефон</dt>
+                <dd class="col-sm-9" th:text="${user.phone}">+996...</dd>
+                <dt class="col-sm-3">Адрес</dt>
+                <dd class="col-sm-9" th:text="${user.address}">Город</dd>
+                <dt class="col-sm-3">Роль</dt>
+                <dd class="col-sm-9" th:text="${user.role}">USER</dd>
+                <dt class="col-sm-3">Дата регистрации</dt>
+                <dd class="col-sm-9" th:text="${#dates.format(user.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">  Документы пользователя</h3>
+    </div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Тип документа</th>
+            <th>Серия</th>
+            <th>Номер</th>
+            <th>Кем выдан</th>
+            <th>Дата выдачи</th>
+            <th>Срок действия</th>
+            <th>Место рождения</th>
+            <th>Гражданство</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doc : ${documents}">
+            <td th:text="${doc.documentType}"></td>
+            <td th:text="${doc.passportSeries}"></td>
+            <td th:text="${doc.passportNumber}"></td>
+            <td th:text="${doc.issuedBy}"></td>
+            <td th:text="${doc.issueDate}"></td>
+            <td th:text="${doc.expiryDate}"></td>
+            <td th:text="${doc.placeOfBirth}"></td>
+            <td th:text="${doc.nationality}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-end d-flex justify-content-between mt-4">
+<!--        <a class="btn btn-secondary" th:href="@{/users/{id}/documents(id=${user.id})}">Смотреть документы на отдельной странице</a>-->
+        <a class="btn btn-outline-primary" th:href="@{/document/add/{id}(id=${user.id})}">Добавить документ</a>
+    </div>
+    <br>
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">  История пользователя</h3>
+    </div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Номер комнаты</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            <th>Пароль</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Адрес</th>
+            <th>Отель</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking : ${bookings}">
+            <td th:text="${booking.roomNumber}"></td>
+            <td th:text="${booking.checkInDate}"></td>
+            <td th:text="${booking.checkOutDate}"></td>
+            <td th:text="${booking.password}"></td>
+            <td th:text="${booking.totalAmount}"></td>
+            <td th:text="${booking.status}"></td>
+            <td th:text="${booking.address}"></td>
+            <td th:text="${booking.hotel}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

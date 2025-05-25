@@ -10,93 +10,29 @@
 <body>
 <div class="container py-5">
     <div class="row">
-        <div class="col-lg-6 max-auto rounded border p-4">
-            <h2 class="text-center mb-4">Забронировать номер</h2>
-            <hr>
+        <div class="col-lg-6 mx-auto rounded border p-4">
+        <h2>Бронирование комнаты № <span th:text="${room.roomNumber}"></span></h2>
+            <p>Тип: <span th:text="${room.roomType}"></span></p>
+            <p>Цена за ночь: <span th:text="${room.pricePerNight}"></span>USD</p>
+            <form th:action="@{/book/add-booking}" method="post">
+                <input type="hidden" name="roomId" th:value="${room.roomId}" />
 
-            <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong th:text="${message}"></strong>
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Закрыть"></button>
-            </div>
-
-            <form method="post" th:action="@{/book/add-booking}">
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Номер комнаты</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" name="roomNumber" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Имя</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" name="firstName" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Фамилия</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" name="lastName" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Дата рождения</label>
-                    <div class="col-sm-8">
-                        <input type="date" class="form-control" name="dateOfBirth" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Номер паспорта</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" name="passportNumber" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Дата заезда</label>
-                    <div class="col-sm-8">
-                        <input type="date" class="form-control" name="checkInDate" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Дата выезда</label>
-                    <div class="col-sm-8">
-                        <input type="date" class="form-control" name="checkOutDate" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Общая сумма</label>
-                    <div class="col-sm-8">
-                        <input type="number" step="0.01" class="form-control" name="totalAmount" required />
-                    </div>
-                </div>
-                <hr>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">Номер карты</label>
-                    <div class="col-sm-8">
-                        <input type="number" step="0.01" class="form-control" name="cardNumber" required />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label">CVV</label>
-                    <div class="col-sm-8">
-                        <input type="text" step="0.01" class="form-control" name="cvv" required />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="offset-sm-4 col-sm-4 d-grid">
-                        <button type="submit" class="btn btn-primary">Отправить</button>
-                    </div>
-                    <div class="col-sm-4 d-grid">
-                        <a href="/" class="btn btn-outline-primary">Отмена</a>
-                    </div>
-                </div>
+                <label>Дата заезда:</label>
+                <input type="date" name="checkInDate" required />
+                <br>
+                <label>Дата выезда:</label>
+                <input type="date" name="checkOutDate" required />
+                <br>
+                <label>Сумма:</label>
+                <input type="number" step="0.01" name="totalAmount" required />
+                <br>
+                <label>Номер карты:</label>
+                <input type="text" name="cardNumber" required />
+                <br>
+                <label>CVV:</label>
+                <input type="text" name="cvv" required />
+                <br>
+                <button type="submit">Забронировать</button>
             </form>
         </div>
     </div>

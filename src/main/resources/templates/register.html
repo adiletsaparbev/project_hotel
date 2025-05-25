@@ -64,6 +64,16 @@
                            th:errors="${registerDto.phone}"></p>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Дата рождения</label>
+                    <div class="col-sm-8">
+                        <input type="date" class="form-control" th:field="${registerDto.birthday}"/>
+                        <p th:if="${#fields.hasErrors('birthday')}"
+                           th:errorclass="text-danger"
+                           th:errors="${registerDto.birthday}"></p>
+                    </div>
+                </div>
+
 
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Адрес</label>

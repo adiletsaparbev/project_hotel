@@ -1,12 +1,7 @@
 package com.example.it_proger.controller;
 
-import com.example.it_proger.models.Booking;
-import com.example.it_proger.models.BookingStatus;
-import com.example.it_proger.models.Card;
-import com.example.it_proger.models.Room;
-import com.example.it_proger.repo.BookingRepository;
-import com.example.it_proger.repo.CardRepository;
-import com.example.it_proger.repo.RoomRepository;
+import com.example.it_proger.models.*;
+import com.example.it_proger.repo.*;
 import com.example.it_proger.servise.BookingService;
 import com.example.it_proger.servise.CardService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +26,11 @@ import java.util.Optional;
 @RequestMapping("/book")
 public class BookingController {
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
+    private DocumentRepository documentRepository;
     @Autowired
     private CardRepository cardRepository;
     private final BookingService bookingService;
@@ -60,10 +64,18 @@ public class BookingController {
         return "bookings"; // Возвращает ту же страницу со списком
     }
     // Отображение страницы с формой
-    @GetMapping("/add-booking")
-    public String booking() {
-        return "add-booking"; // Страница с формой бронирования
+    @GetMapping("/add-booking/{roomId}")
+    public String showBookingForm(@PathVariable int roomId, Model model) {
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            model.addAttribute("message", "Комната не найдена");
+            return "error";
+        }
+        model.addAttribute("room", room);
+        model.addAttribute("booking", new Booking()); // пустой объект для формы
+        return "add-booking"; // твой шаблон формы бронирования
     }
+
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
@@ -72,98 +84,100 @@ public class BookingController {
     private RoomRepository roomRepository;
 
     @PostMapping("/add-booking")
-    public String bookRoom(@RequestParam("roomNumber") String roomNumber,
-                           @RequestParam("firstName") String firstName,
-                           @RequestParam("lastName") String lastName,
-                           @RequestParam("dateOfBirth") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfBirth,
-                           @RequestParam("passportNumber") String passportNumber,
+    public String bookRoom(@RequestParam("roomId") int roomId,
                            @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
                            @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
                            @RequestParam("totalAmount") double totalAmount,
                            @RequestParam String cardNumber,
                            @RequestParam String cvv,
+                           Principal principal,
                            Model model) {
-        // Проверка возраста клиента
+
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if (room == null) {
+            model.addAttribute("message", "Комната не найдена");
+            return "add-booking";
+        }
+
+        AppUser appUser = appUserRepository.findByEmail(principal.getName());
+        List<Document> documents = documentRepository.findByUser(appUser);
+
+        // Найти документ типа "ПАСПОРТ"
+        Optional<Document> passportDocOpt = documents.stream()
+                .filter(doc -> "ПАСПОРТ".equalsIgnoreCase(doc.getDocumentType()))
+                .findFirst();
+
+        if (passportDocOpt.isEmpty()) {
+            model.addAttribute("message", "У пользователя нет документа типа 'ПАСПОРТ'");
+            return "add-booking";
+        }
+
+        Document passport = passportDocOpt.get();
+        Hotel hotel = room.getHotel(); // Получаем отель из комнаты
+
+
         LocalDate today = LocalDate.now();
-        Period age = Period.between(dateOfBirth, today);
+        Period age = Period.between(appUser.getBirthday(), today);
         if (age.getYears() < 18) {
             model.addAttribute("message", "Возраст должен быть старше 18 лет");
             return "add-booking";
         }
 
-        // Проверка дат
         long nights = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         if (nights <= 0) {
-            model.addAttribute("message", "Не правильно вводил дату");
+            model.addAttribute("message", "Неправильно введены даты");
             return "add-booking";
         }
 
-        // Проверка наличия комнаты
-        Room room = roomRepository.findByRoomNumber(roomNumber);
-        if (room == null) {
-            model.addAttribute("message", "Комната не найден");
-            return "add-booking";
-        }
-
-        // Проверка пересечения с существующими бронированиями
-        List<Booking> existingBookings = bookingRepository.findActiveBookingsByRoomNumber(roomNumber);
+        List<Booking> existingBookings = bookingRepository.findActiveBookingsByRoomNumber(room.getRoomNumber());
         for (Booking booking : existingBookings) {
             if ((checkInDate.isBefore(booking.getCheckOutDate()) && checkOutDate.isAfter(booking.getCheckInDate())) ||
                     checkInDate.equals(booking.getCheckInDate()) || checkOutDate.equals(booking.getCheckOutDate())) {
-                model.addAttribute("message", "Комната бронирован на эти даты");
+                model.addAttribute("message", "Комната уже забронирована на эти даты");
                 return "add-booking";
             }
         }
 
-        // Полная стоимость бронирования
         double totalBookingCost = nights * room.getPricePerNight();
-
-        // Минимальная предоплата (30%)
         double minimumPrepayment = totalBookingCost * 0.3;
 
-        // Проверка введенной суммы
         if (totalAmount < minimumPrepayment) {
-            model.addAttribute("message", "Цена должен быть больше 30% общий суммы");
+            model.addAttribute("message", "Цена должна быть больше 30% от общей суммы");
             return "add-booking";
         }
 
-        // Проверка карты
         Card card = cardRepository.findByCardNumberAndCvv(cardNumber, cvv).orElse(null);
         if (card == null) {
-            model.addAttribute("message", "Карта не найден ! Введите правильно");
+            model.addAttribute("message", "Карта не найдена! Введите данные правильно");
             return "add-booking";
         }
 
         if (card.getBalance() < totalAmount) {
-            model.addAttribute("message", "Не хватает денег.");
+            model.addAttribute("message", "Недостаточно средств на карте");
             return "add-booking";
         }
 
-        // Обновление баланса карты
         card.setBalance(card.getBalance() - totalAmount);
         cardRepository.save(card);
 
-        // Создание бронирования
         Booking booking = new Booking();
-        booking.setRoomNumber(roomNumber);
-        booking.setFirstName(firstName);
-        booking.setLastName(lastName);
-        booking.setDateOfBirth(dateOfBirth);
-        booking.setPassportNumber(passportNumber);
+        booking.setRoom(room);
+        booking.setRoomNumber(room.getRoomNumber());
+        booking.setFirstName(appUser.getFirstName());
+        booking.setLastName(appUser.getLastName());
+        booking.setDateOfBirth(appUser.getBirthday());
+        booking.setPassportNumber(passport.getPassportNumber());
         booking.setCheckInDate(checkInDate);
         booking.setCheckOutDate(checkOutDate);
         booking.setTotalAmount(totalAmount);
+        booking.setHotel(hotel.getNumber()); // или hotel.getName(), если есть такое поле
+        booking.setAddress(hotel.getAddress());
+        booking.setUser(appUser);
         booking.setStatus(totalAmount >= totalBookingCost ? BookingStatus.PAID : BookingStatus.PENDING);
-
         bookingRepository.save(booking);
 
-        // Сообщение об успешной оплате
-        model.addAttribute("message", "Payment successfully processed! Booking status: " +
+        model.addAttribute("message", "Оплата прошла успешно! Статус бронирования: " +
                 (totalAmount >= totalBookingCost ? "PAID" : "PENDING_PAYMENT") + ".");
-        model.addAttribute("booking", booking);
-        return "add-booking";
+        return "redirect:/profile";
     }
-
-
-
 }
