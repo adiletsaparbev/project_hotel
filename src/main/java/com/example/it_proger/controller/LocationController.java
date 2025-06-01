@@ -51,12 +51,18 @@ public class LocationController {
         return "fragments/rooms :: roomTable";
     }
 
-// Показать форму добавления страны
     @GetMapping("/countries/add")
     public String showAddForm(Model model) {
         model.addAttribute("country", new Country());
+
+        List<Country> countries = countryRepository.findAll();
+        List<City> cities = cityRepository.findAll();
+        model.addAttribute("countries", countries); // список стран для формы города
+        model.addAttribute("cities", cities);
+
         return "admin/addCountryForm"; // addCountryForm.html
     }
+
 
     // Обработка добавления страны
     @PostMapping("/countries/add")
@@ -66,19 +72,22 @@ public class LocationController {
     }
 
     @PostMapping("/cities/add")
-    public String addCity(@RequestParam String cityName, @RequestParam int countryId, Model model) {
+    public String addCity(@RequestParam String cityName,
+                          @RequestParam int countryId,
+                          Model model) {
         Optional<Country> countryOpt = countryRepository.findById(countryId);
         if (countryOpt.isPresent()) {
             City city = new City();
             city.setName(cityName);
             city.setCountry(countryOpt.get());
             cityRepository.save(city);
-            model.addAttribute("successMessage", "City added successfully.");
+            model.addAttribute("successMessage", "Город успешно добавлен.");
         } else {
-            model.addAttribute("errorMessage", "Country with ID " + countryId + " not found.");
+            model.addAttribute("errorMessage", "Страна не найдена.");
         }
         return "redirect:/locations";
     }
+
 
 
     @PostMapping("/hotels/add")

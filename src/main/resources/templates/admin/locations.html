@@ -9,7 +9,7 @@
 <body class="bg-light">
 <header th:insert="~{blocks/header_admin :: header}"></header>
 <div class="container py-4">
-    <h2 class="mb-4">Countries</h2>
+    <h2 class="mb-4">Страны</h2>
     <ul class="list-group mb-4">
         <li class="list-group-item" th:each="country : ${countries}">
             <div>
@@ -17,8 +17,8 @@
                 <a href="#" th:text="${country.name}" th:attr="data-id=${country.id}" class="country-link text-decoration-none"></a>
             </div>
             <div>
-                <a th:href="@{'/countries/edit/' + ${country.id}}" class="btn btn-sm btn-primary">Edit</a>
-                <a th:href="@{'/countries/delete/' + ${country.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/countries/edit/' + ${country.id}}" class="btn btn-sm btn-primary">Изменить</a>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/countries/delete/' + ${country.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Удалить</a>
             </div>
         </li>
 

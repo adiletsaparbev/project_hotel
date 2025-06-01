@@ -1,66 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Location Data</title>
+    <meta charset="UTF-8">
+    <title>Добавление данных о локации</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <header th:insert="~{blocks/header_admin :: header}"></header>
 
 <div class="container mt-5">
-    <!-- Отображение ошибок -->
+    <!-- Отображение сообщений -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 
     <!-- Добавление страны -->
-    <h2>Add a New Country</h2>
+    <h2 class="mb-3">Добавить новую страну</h2>
     <form th:action="@{/countries/add}" th:object="${country}" method="post" class="mb-5">
         <div class="mb-3">
-            <label for="countryName" class="form-label">Country Name</label>
+            <label for="countryName" class="form-label">Название страны</label>
             <input type="text" th:field="*{name}" class="form-control" id="countryName" required>
         </div>
-        <button type="submit" class="btn btn-primary">Add Country</button>
+        <button type="submit" class="btn btn-primary">Добавить страну</button>
     </form>
 
-    <!-- Добавление города -->
-    <h2>Add a New City</h2>
+
+    <h2 class="mb-3">Добавить новый город</h2>
     <form th:action="@{/cities/add}" method="post" class="mb-5">
         <div class="mb-3">
-            <label class="form-label">City Name</label>
-            <input type="text" name="cityName" class="form-control" required>
+            <label for="cityName" class="form-label">Название города</label>
+            <input type="text" name="cityName" id="cityName" class="form-control" required>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Country ID</label>
-            <input type="text" name="countryId" class="form-control" required>
+            <label for="countryId" class="form-label">Выберите страну</label>
+            <select class="form-select" id="countryId" name="countryId" required>
+                <option value="" disabled selected>Выберите...</option>
+                <option th:each="country : ${countries}"
+                        th:value="${country.id}"
+                        th:text="${country.name}">
+                </option>
+            </select>
         </div>
-        <button type="submit" class="btn btn-success">Add City</button>
+
+        <button type="submit" class="btn btn-success">Добавить город</button>
     </form>
 
 
     <!-- Добавление отеля -->
-    <h2>Add a New Hotel</h2>
+    <h2 class="mb-3">Добавить новый отель</h2>
     <form th:action="@{/hotels/add}" method="post">
         <div class="mb-3">
-            <label class="form-label">Название города</label>
-            <input type="text" name="cityName" class="form-control" required>
+            <label for="hotelCity" class="form-label">Название города</label>
+            <select class="form-select" id="hotelCity" name="cityName" required>
+                <option value="" disabled selected>Выберите...</option>
+                <option th:each="city : ${cities}"
+                        th:value="${city.id}"
+                        th:text="${city.name}">
+                </option>
+            </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">Hotel Number</label>
-            <input type="text" name="hotelNumber" class="form-control" required>
+            <label for="hotelNumber" class="form-label">Номер отеля</label>
+            <input type="text" name="hotelNumber" id="hotelNumber" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Адрес</label>
-            <input type="text" name="address" class="form-control" required>
+            <label for="address" class="form-label">Адрес</label>
+            <input type="text" name="address" id="address" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Описание</label>
-            <input type="text" name="description" class="form-control" required>
+            <label for="description" class="form-label">Описание</label>
+            <input type="text" name="description" id="description" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Пароль</label>
-            <input type="text" name="password" class="form-control" required>
+            <label for="password" class="form-label">Пароль</label>
+            <input type="text" name="password" id="password" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-warning">Add Hotel</button>
+        <button type="submit" class="btn btn-warning">Добавить отель</button>
     </form>
 </div>
 </body>

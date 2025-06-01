@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали бронирования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <!-- Заголовок -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Детали бронирования</h2>
+        <p class="text-muted">Просмотрите информацию о вашем бронировании и комнате</p>
+    </div>
+
+    <!-- Детали бронирования -->
+    <div class="card shadow mb-4 rounded-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Информация о бронировании</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr><th>ID</th><td th:text="${booking.id}"></td></tr>
+                <tr><th>Имя</th><td th:text="${booking.firstName}"></td></tr>
+                <tr><th>Фамилия</th><td th:text="${booking.lastName}"></td></tr>
+                <tr><th>Номер комнаты</th><td th:text="${booking.roomNumber}"></td></tr>
+                <tr><th>Отель</th><td th:text="${booking.hotel}"></td></tr>
+                <tr><th>Адрес</th><td th:text="${booking.address}"></td></tr>
+                <tr><th>Дата рождения</th><td th:text="${booking.dateOfBirth}"></td></tr>
+                <tr><th>Паспорт</th><td th:text="${booking.passportNumber}"></td></tr>
+                <tr><th>Дата заезда</th><td th:text="${booking.checkInDate}"></td></tr>
+                <tr><th>Дата выезда</th><td th:text="${booking.checkOutDate}"></td></tr>
+                <tr><th>Сумма</th><td th:text="${booking.totalAmount} + ' сом'"></td></tr>
+                <tr><th>Статус</th><td th:text="${booking.status}"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-end">
+            <a th:href="@{/hotel-panel/{id}(id=${booking.room.hotel.id})}" class="btn btn-secondary">🔙 Назад к отелю</a>
+        </div>
+    </div>
+
+    <!-- Информация о комнате -->
+    <div class="card shadow rounded-4 mb-4">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Информация о комнате</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Номер комнаты</dt>
+                <dd class="col-sm-8" th:text="${room.roomNumber}">101</dd>
+
+                <dt class="col-sm-4">Тип комнаты</dt>
+                <dd class="col-sm-8" th:text="${room.roomType}">Стандарт</dd>
+
+                <dt class="col-sm-4">Количество кроватей</dt>
+                <dd class="col-sm-8" th:text="${room.bedCount}">2</dd>
+
+                <dt class="col-sm-4">Цена за ночь</dt>
+                <dd class="col-sm-8" th:text="${room.pricePerNight} + ' сом'">2000 сом</dd>
+
+                <dt class="col-sm-4">Описание</dt>
+                <dd class="col-sm-8" th:text="${room.description}">Уютный номер с балконом...</dd>
+
+                <dt class="col-sm-4">Доступность</dt>
+                <dd class="col-sm-8">
+                    <span th:text="${room.available} ? 'Доступна' : 'Занята'"
+                          th:classappend="${room.available} ? 'badge bg-success' : 'badge bg-danger'"></span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <!-- Информация о клиенте -->
+    <div class="card shadow rounded-4 mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Информация о клиенте</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Имя</dt>
+                <dd class="col-sm-8" th:text="${user.firstName}">Имя клиента</dd>
+
+                <dt class="col-sm-4">Фамилия</dt>
+                <dd class="col-sm-8" th:text="${user.lastName}">Фамилия клиента</dd>
+
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8" th:text="${user.email}">example@mail.com</dd>
+
+                <dt class="col-sm-4">Телефон</dt>
+                <dd class="col-sm-8" th:text="${user.phone}">+996 700 123 456</dd>
+
+                <dt class="col-sm-4">Адрес</dt>
+                <dd class="col-sm-8" th:text="${user.address}">г. Бишкек...</dd>
+
+                <dt class="col-sm-4">Дата рождения</dt>
+                <dd class="col-sm-8" th:text="${user.birthday}">2000-01-01</dd>
+
+                <dt class="col-sm-4">Создан</dt>
+                <dd class="col-sm-8" th:text="${#dates.format(user.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023</dd>
+            </dl>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

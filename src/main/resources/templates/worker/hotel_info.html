@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hotel Info</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-4">
+    <h2>Информация об отеле</h2>
+    <div class="mb-3">
+        <strong>Номер:</strong> <span th:text="${hotel.number}"></span><br>
+        <strong>Адрес:</strong> <span th:text="${hotel.address}"></span><br>
+        <strong>Ранг:</strong> <span th:text="${hotel.hotelRank}"></span><br>
+        <strong>Описание:</strong> <span th:text="${hotel.description}"></span><br>
+    </div>
+    <!-- Сообщение о статусе -->
+    <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
+    <br>
+    <div class="mb-4 text-end">
+        <a th:href="@{/hotel-panel/rooms/add/{hotelId}(hotelId=${hotel.id})}" class="btn btn-success">
+            ➕ Добавить комнату
+        </a>
+        <a th:href="@{/hotel-panel/bookings/{hotelId}(hotelId=${hotel.id})}" class="btn btn-info">
+            📋 Показать бронирования
+        </a>
+
+    </div>
+
+
+    <hr>
+    <br>
+    <h1>Поиск Комнат</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Поиск Комнат</h1>
+        <form th:action="@{/hotel-panel/rooms/search}" method="get" class="row g-3">
+            <input type="hidden" name="hotelId" th:value="${hotel.id}" />
+
+            <div class="col-md-4">
+                <label for="roomNumber" class="form-label">Номер Комнат:</label>
+                <input type="text" id="roomNumber" name="roomNumber" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="roomType" class="form-label">Тип:</label>
+                <input type="text" id="roomType" name="roomType" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="roomId" class="form-label">ID комнат:</label>
+                <input type="number" id="roomId" name="roomId" class="form-control">
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary mt-3">Поиск</button>
+            </div>
+        </form>
+
+        <hr>
+        <!-- Таблица с комнатами -->
+        <table class="table table-striped mt-4">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th>Кол-Кровать</th>
+                <th>Цена за ночь</th>
+                <th>Доступность</th>
+                <th>Функции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.roomId}"></td>
+                <td th:text="${room.roomNumber}"></td>
+                <td th:text="${room.roomType}"></td>
+                <td th:text="${room.bedCount}"></td>
+                <td th:text="${room.pricePerNight}"></td>
+                <td>
+                            <span th:text="${room.availability} ? 'Доступно' : 'Не Доступно'"
+                                  class="badge"
+                                  th:classappend="${room.availability} ? 'bg-success' : 'bg-danger'"></span>
+                </td>
+                <td>
+                    <a th:href="@{/rooms/{id}(id=${room.roomId})}" class="btn btn-primary btn-sm">Редактировать</a>
+                    <form th:action="@{/rooms/delete/{id}(id=${room.roomId})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    </div>
+</body>
+</html>

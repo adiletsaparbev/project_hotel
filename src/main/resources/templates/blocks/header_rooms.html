@@ -12,14 +12,14 @@
 
             <!-- Navigation Menu -->
             <nav class="table_header" style="display: flex; gap: 20px;">
-                <a class="menu_item" href="/" style="text-decoration: none; color: #333; font-size: 16px;">Главная</a>
-                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/rooms" style="text-decoration: none; color: #333; font-size: 16px;">Комнаты</a>
-<!--               <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}" href="/rooms/add" style="text-decoration: none; color: #333; font-size: 16px;">Добавить</a>-->
-                <a class="menu_item"  href="/profile" style="text-decoration: none; color: #333; font-size: 16px;">Профиль</a>
+                <a class="menu_item" href="/hotel-panel/locations" style="text-decoration: none; color: #333; font-size: 16px;">Главная</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}" href="/rooms" style="text-decoration: none; color: #333; font-size: 16px;">Комнаты</a>
+                <a class="menu_item" th:href="@{/hotel-panel/rooms/add/{hotelId}(hotelId=${hotel.hotelId})}" class="btn btn-success mb-3">Добавить комнату</a>
+                <a class="menu_item" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" href="/profile" style="text-decoration: none; color: #333; font-size: 16px;">Профиль</a>
                 <a class="menu_item" href="/register" style="text-decoration: none; color: #333; font-size: 16px;">Регистрация</a>
                 <a class="menu_item" href="/login" style="text-decoration: none; color: #333; font-size: 16px;">Авторизация</a>
                 <div class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}">
-                    <a href="/hotel-panel/locations" class="btn btn-success">Работник</a>
+                    <a href="/book/bookings" class="btn btn-success">Бронированный</a>
                 </div>
                 <div class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                     <a href="/locations" class="btn btn-success">Для Админа</a>

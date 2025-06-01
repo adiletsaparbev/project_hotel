@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Бронирования отеля</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-4">
+    <h2>Бронирования для отеля: <span th:text="${hotel.number}"></span></h2>
+    <a th:href="@{/hotel-panel/rooms/search(hotelId=${hotel.id})}" class="btn btn-secondary mb-3">⬅ Назад к отелю</a>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Номер комнаты</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            <th>Статус</th>
+            <th>Функции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking : ${bookings}">
+            <td th:text="${booking.id}">1</td>
+            <td th:text="${booking.firstName}">Имя</td>
+            <td th:text="${booking.lastName}">Фамилия</td>
+            <td th:text="${booking.roomNumber}">101</td>
+            <td th:text="${booking.checkInDate}">2025-06-01</td>
+            <td th:text="${booking.checkOutDate}">2025-06-05</td>
+            <td th:text="${booking.status}">PENDING</td>
+            <td>
+                <a th:href="@{/hotel-panel/booking/{id}(id=${booking.id})}" class="btn btn-info btn-sm">Подробнее</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

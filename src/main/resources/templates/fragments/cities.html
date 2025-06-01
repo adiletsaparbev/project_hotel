@@ -4,9 +4,9 @@
         <thead class="table-light">
         <tr>
             <th>ID</th>
-            <th>City Name</th>
-            <th>Country ID</th>
-            <th>Actions</th>
+            <th>Название города</th>
+            <th>Страна ID</th>
+            <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" >Действие</th>
         </tr>
         </thead>
         <tbody>
@@ -16,9 +16,9 @@
                 <a href="#" th:text="${city.name}" th:attr="data-id=${city.id}" class="city-link text-decoration-none"></a>
             </td>
             <td th:text="${city.country.id}">1</td>
-            <td>
-                <a th:href="@{'/cities/edit/' + ${city.id}}" class="btn btn-sm btn-primary">Edit</a>
-                <a th:href="@{'/cities/delete/' + ${city.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" >
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/cities/edit/' + ${city.id}}" class="btn btn-sm btn-primary">Изменить</a>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/cities/delete/' + ${city.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Удалить</a>
             </td>
         </tr>
         </tbody>

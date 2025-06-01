@@ -4,41 +4,60 @@
     <title>Добавить бронирование</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body class="bg-light">
 <div class="container py-5">
-    <div class="row">
-        <div class="col-lg-6 mx-auto rounded border p-4">
-        <h2>Бронирование комнаты № <span th:text="${room.roomNumber}"></span></h2>
-            <p>Тип: <span th:text="${room.roomType}"></span></p>
-            <p>Цена за ночь: <span th:text="${room.pricePerNight}"></span>USD</p>
-            <form th:action="@{/book/add-booking}" method="post">
-                <input type="hidden" name="roomId" th:value="${room.roomId}" />
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-3 text-center">
+                        Бронирование комнаты № <span th:text="${room.roomNumber}"></span>
+                    </h3>
+                    <p><strong>Тип:</strong> <span th:text="${room.roomType}"></span></p>
+                    <p><strong>Цена за ночь:</strong> <span th:text="${room.pricePerNight}"></span> USD</p>
 
-                <label>Дата заезда:</label>
-                <input type="date" name="checkInDate" required />
-                <br>
-                <label>Дата выезда:</label>
-                <input type="date" name="checkOutDate" required />
-                <br>
-                <label>Сумма:</label>
-                <input type="number" step="0.01" name="totalAmount" required />
-                <br>
-                <label>Номер карты:</label>
-                <input type="text" name="cardNumber" required />
-                <br>
-                <label>CVV:</label>
-                <input type="text" name="cvv" required />
-                <br>
-                <button type="submit">Забронировать</button>
-            </form>
+                    <form th:action="@{/book/add-booking}" method="post">
+                        <input type="hidden" name="roomId" th:value="${room.roomId}" />
+
+                        <div class="mb-3">
+                            <label for="checkInDate" class="form-label">Дата заезда:</label>
+                            <input type="date" class="form-control" id="checkInDate" name="checkInDate" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="checkOutDate" class="form-label">Дата выезда:</label>
+                            <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="totalAmount" class="form-label">Сумма:</label>
+                            <input type="number" step="0.01" class="form-control" id="totalAmount" name="totalAmount" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Номер карты:</label>
+                            <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV:</label>
+                            <input type="text" class="form-control" id="cvv" name="cvv" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Забронировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
