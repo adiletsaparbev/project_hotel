@@ -41,7 +41,7 @@
 
 ### Предварительные требования
 
-  - **Java Development Kit (JDK):** Версия 17 или выше.
+  - **Java Development Kit (JDK):** Версия 21 или выше.
   - **Maven:** Система управления проектами.
   - **PostgreSQL:** Система управления базами данных.
 
@@ -50,7 +50,7 @@
 1.  **Клонируйте репозиторий:**
 
     ```sh
-    git clone https://github.com/ваш-логин/ваш-репозиторий.git
+    git clone https://github.com/adiletsaparbev/project_hotel.git
     ```
 
 2.  **Настройте базу данных:**
